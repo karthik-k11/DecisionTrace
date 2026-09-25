@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DecisionTrace</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<main class="container">
+
+    <header>
+        <div class="brand">DecisionTrace</div>
+        <p>AI Decision Explanation & Evidence Mapper</p>
+    </header>
+
+
+    <section class="card">
+
+        <h1>Analyze a Decision</h1>
+
+        <p class="description">
+            Enter the decision and context you want DecisionTrace to analyze.
+        </p>
+
+        <form method="POST">
+
+            <label for="decision_text">
+                Decision / Context
+            </label>
+
+            <textarea
+                id="decision_text"
+                name="decision_text"
+                placeholder="Example: We should choose PostgreSQL because our application needs relational data, transactions, and complex queries."
+                required
+            >{{ decision_text }}</textarea>
+
+            <button type="submit">
+                Analyze Decision
+            </button>
+
+        </form>
+
+    </section>
+
+
+    {% if error %}
+
+    <section class="card result-card">
+
+        <h2>Analysis Error</h2>
+
+        <p>{{ error }}</p>
+
+    </section>
+
+    {% endif %}
+
+
+    {% if result %}
+
+    <section class="card result-card">
+
+        <h2>Decision</h2>
+
+        <p class="decision">
+            {{ result.decision }}
+        </p>
+
+
+        <h2>Evidence</h2>
+
+        <ul>
+            {% for item in result.evidence %}
+            <li>
+                <strong>{{ item.text }}</strong>
+                <br>
+                <span>{{ item.supports }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+
+
+        <h2>Assumptions</h2>
+
+        <ul>
+            {% for item in result.assumptions %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+
+
+        <h2>Reasoning Links</h2>
+
+        {% for link in result.reasoning_links %}
+
+        <div class="reasoning-link">
+
+            <strong>{{ link.from_ }}</strong>
+
+            <span>↓</span>
+
+            <strong>{{ link.to }}</strong>
+
+            <p>{{ link.reason }}</p>
+
+        </div>
+
+        {% endfor %}
+
+
+        <h2>Potential Gaps</h2>
+
+        <ul>
+            {% for gap in result.gaps %}
+            <li>{{ gap }}</li>
+            {% endfor %}
+        </ul>
+
+    </section>
+
+    {% endif %}
+
+</main>
+
+</body>
+
+</html>

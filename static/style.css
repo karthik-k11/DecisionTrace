@@ -1,0 +1,102 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background: #111318;
+    color: #e8eaf0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: min(900px, 92%);
+    margin: 0 auto;
+    padding: 70px 0;
+}
+
+header {
+    margin-bottom: 35px;
+}
+
+.brand {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+header p {
+    margin-top: 8px;
+    color: #9298a5;
+    font-size: 15px;
+}
+
+.card {
+    background: #191c23;
+    border: 1px solid #2a2e38;
+    border-radius: 12px;
+    padding: 32px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.description {
+    color: #9298a5;
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+textarea {
+    width: 100%;
+    min-height: 220px;
+    resize: vertical;
+
+    background: #101218;
+    color: #e8eaf0;
+
+    border: 1px solid #303541;
+    border-radius: 8px;
+
+    padding: 16px;
+    font-size: 15px;
+    line-height: 1.6;
+
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #737b8c;
+}
+
+button {
+    margin-top: 18px;
+
+    padding: 12px 20px;
+
+    background: #e8eaf0;
+    color: #111318;
+
+    border: none;
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ffffff;
+}
