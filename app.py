@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 
-from llm_client import analyze_decision
+from analyzer import analyze
+from validator import validate_input
 
 
 app = Flask(__name__)
@@ -15,9 +16,13 @@ def home():
     if request.method == "POST":
         decision_text = request.form.get("decision_text", "").strip()
 
-        if decision_text:
+        valid, validation_message = validate_input(decision_text)
+
+        if not valid:
+            error = validation_message
+        else:
             try:
-                result = analyze_decision(decision_text)
+                result = analyze(decision_text)
             except Exception as exc:
                 error = str(exc)
 
