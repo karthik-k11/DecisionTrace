@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,7 +56,9 @@
 
     {% if error %}
 
-    <section class="card result-card">
+    <section class="card result-card error-card">
+
+        <div class="section-label">ERROR</div>
 
         <h2>Analysis Error</h2>
 
@@ -70,61 +73,161 @@
 
     <section class="card result-card">
 
-        <h2>Decision</h2>
-
-        <p class="decision">
-            {{ result.decision }}
-        </p>
-
-
-        <h2>Evidence</h2>
-
-        <ul>
-            {% for item in result.evidence %}
-            <li>
-                <strong>{{ item.text }}</strong>
-                <br>
-                <span>{{ item.supports }}</span>
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="trace-header">
+            <div>
+                <div class="section-label">DECISION TRACE</div>
+                <h2>Analysis Result</h2>
+            </div>
+        </div>
 
 
-        <h2>Assumptions</h2>
+        <!-- Decision -->
 
-        <ul>
-            {% for item in result.assumptions %}
-            <li>{{ item }}</li>
-            {% endfor %}
-        </ul>
+        <div class="trace-section decision-section">
 
+            <div class="section-label">01 · DECISION</div>
 
-        <h2>Reasoning Links</h2>
-
-        {% for link in result.reasoning_links %}
-
-        <div class="reasoning-link">
-
-            <strong>{{ link.from_ }}</strong>
-
-            <span>↓</span>
-
-            <strong>{{ link.to }}</strong>
-
-            <p>{{ link.reason }}</p>
+            <p class="decision">
+                {{ result.decision }}
+            </p>
 
         </div>
 
-        {% endfor %}
+
+        <!-- Evidence -->
+
+        <div class="trace-section">
+
+            <div class="section-label">02 · EVIDENCE</div>
+
+            {% if result.evidence %}
+
+            <div class="trace-list">
+
+                {% for item in result.evidence %}
+
+                <div class="trace-item">
+
+                    <strong>{{ item.text }}</strong>
+
+                    <p>{{ item.supports }}</p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <p class="empty-result">
+                No evidence identified.
+            </p>
+
+            {% endif %}
+
+        </div>
 
 
-        <h2>Potential Gaps</h2>
+        <!-- Assumptions -->
 
-        <ul>
-            {% for gap in result.gaps %}
-            <li>{{ gap }}</li>
-            {% endfor %}
-        </ul>
+        <div class="trace-section">
+
+            <div class="section-label">03 · ASSUMPTIONS</div>
+
+            {% if result.assumptions %}
+
+            <ul class="trace-list simple-list">
+
+                {% for item in result.assumptions %}
+
+                <li>{{ item }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% else %}
+
+            <p class="empty-result">
+                No assumptions identified.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Reasoning Links -->
+
+        <div class="trace-section">
+
+            <div class="section-label">04 · REASONING LINKS</div>
+
+            {% if result.reasoning_links %}
+
+            <div class="reasoning-list">
+
+                {% for link in result.reasoning_links %}
+
+                <div class="reasoning-link">
+
+                    <div class="reasoning-flow">
+
+                        <strong>{{ link.from_ }}</strong>
+
+                        <span>→</span>
+
+                        <strong>{{ link.to }}</strong>
+
+                    </div>
+
+                    <p>{{ link.reason }}</p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <p class="empty-result">
+                No reasoning links identified.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Potential Gaps -->
+
+        <div class="trace-section">
+
+            <div class="section-label">05 · POTENTIAL GAPS</div>
+
+            {% if result.gaps %}
+
+            <ul class="trace-list simple-list">
+
+                {% for gap in result.gaps %}
+
+                <li>{{ gap }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% else %}
+
+            <p class="empty-result">
+                No potential gaps identified.
+            </p>
+
+            {% endif %}
+
+        </div>
 
     </section>
 
@@ -135,3 +238,4 @@
 </body>
 
 </html>
+```

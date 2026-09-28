@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Decision Trace - DecisionTrace</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="history-header">
+
+        <div>
+            <div class="brand">DecisionTrace</div>
+            <h1>Decision Trace</h1>
+            <p>Saved analysis</p>
+        </div>
+
+        <a href="/history" class="new-analysis">
+            ← Back to History
+        </a>
+
+    </header>
+
+
+    <section class="trace-section">
+
+        <div class="trace-meta">
+            Saved on {{ analysis.created_at }}
+        </div>
+
+        <div class="trace-card">
+
+            <h2>Decision</h2>
+
+            <p>{{ analysis.decision }}</p>
+
+        </div>
+
+
+        {% set result = analysis.result_json | from_json %}
+
+
+        <div class="trace-card">
+
+            <h2>Evidence</h2>
+
+            {% if result.evidence %}
+
+                {% for evidence in result.evidence %}
+
+                    <div class="trace-item">
+                        <strong>{{ evidence.text }}</strong>
+                        <p>{{ evidence.supports }}</p>
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>No evidence identified.</p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="trace-card">
+
+            <h2>Assumptions</h2>
+
+            {% if result.assumptions %}
+
+                <ul>
+
+                    {% for assumption in result.assumptions %}
+
+                        <li>{{ assumption }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+            {% else %}
+
+                <p>No assumptions identified.</p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="trace-card">
+
+            <h2>Reasoning Links</h2>
+
+            {% if result.reasoning_links %}
+
+                {% for link in result.reasoning_links %}
+
+                    <div class="trace-item">
+
+                        <strong>
+                            {{ link["from"] }} → {{ link.to }}
+                        </strong>
+
+                        <p>{{ link.reason }}</p>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>No reasoning links identified.</p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="trace-card">
+
+            <h2>Potential Gaps</h2>
+
+            {% if result.gaps %}
+
+                <ul>
+
+                    {% for gap in result.gaps %}
+
+                        <li>{{ gap }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+            {% else %}
+
+                <p>No potential gaps identified.</p>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

@@ -60,3 +60,34 @@ def save_analysis(input_text, result):
 
     connection.commit()
     connection.close()
+
+def get_history():
+    connection = get_connection()
+
+    rows = connection.execute(
+        """
+        SELECT id, created_at, decision, input_summary, result_json
+        FROM decisions
+        ORDER BY id DESC
+        """
+    ).fetchall()
+
+    connection.close()
+
+    return [dict(row) for row in rows]
+
+def get_analysis(analysis_id):
+    connection = get_connection()
+
+    row = connection.execute(
+        """
+        SELECT id, created_at, decision, input_summary, result_json
+        FROM decisions
+        WHERE id = ?
+        """,
+        (analysis_id,),
+    ).fetchone()
+
+    connection.close()
+
+    return dict(row) if row else None
