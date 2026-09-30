@@ -36,4 +36,4 @@ def test_missing_analysis():
     response = client.get("/history/999999")
 
     assert response.status_code == 404
-    assert b"Analysis not found" in response.data
+    assert b"Analysis Not Found" in response.data
