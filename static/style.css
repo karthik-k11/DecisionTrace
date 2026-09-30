@@ -369,3 +369,16 @@ button:hover {
 .history-link:hover {
     text-decoration: underline;
 }
+.error-page {
+    text-align: center;
+    padding: 50px 30px;
+}
+
+.error-page h1 {
+    margin: 10px 0;
+}
+
+.error-page p {
+    color: #8b949e;
+    margin-bottom: 24px;
+}
