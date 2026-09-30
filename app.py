@@ -56,7 +56,7 @@ def history_detail(analysis_id):
     analysis = get_analysis(analysis_id)
 
     if analysis is None:
-        return "Analysis not found", 404
+        return render_template("404.html"), 404
 
     return render_template(
         "history_detail.html",
