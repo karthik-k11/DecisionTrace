@@ -114,3 +114,93 @@ def test_get_analysis(tmp_path, monkeypatch):
     assert analysis is not None
     assert analysis["id"] == analysis_id
     assert analysis["decision"] == "Use PostgreSQL"
+
+def test_analysis_persists_after_reopening_connection(
+    monkeypatch,
+    tmp_path,
+):
+    import database
+
+    monkeypatch.setattr(database, "DATABASE_DIR", tmp_path)
+    monkeypatch.setattr(
+        database,
+        "DATABASE_PATH",
+        tmp_path / "decisiontrace.db",
+    )
+
+    database.initialize_database()
+
+    class MockResult:
+        decision = "Use PostgreSQL"
+
+        def model_dump(self):
+            return {
+                "decision": "Use PostgreSQL",
+                "evidence": [],
+                "assumptions": [],
+                "reasoning_links": [],
+                "gaps": [],
+            }
+
+    database.save_analysis(
+        "The application needs relational data.",
+        MockResult(),
+    )
+
+    # Open a fresh connection and retrieve the saved analysis.
+    connection = database.get_connection()
+
+    row = connection.execute(
+        "SELECT id FROM decisions"
+    ).fetchone()
+
+    connection.close()
+
+    analysis = database.get_analysis(row["id"])
+
+    assert analysis is not None
+    assert analysis["decision"] == "Use PostgreSQL"
+
+def test_history_returns_newest_first(
+    monkeypatch,
+    tmp_path,
+):
+    import database
+
+    monkeypatch.setattr(database, "DATABASE_DIR", tmp_path)
+    monkeypatch.setattr(
+        database,
+        "DATABASE_PATH",
+        tmp_path / "decisiontrace.db",
+    )
+
+    database.initialize_database()
+
+    class MockResult:
+        def __init__(self, decision):
+            self.decision = decision
+
+        def model_dump(self):
+            return {
+                "decision": self.decision,
+                "evidence": [],
+                "assumptions": [],
+                "reasoning_links": [],
+                "gaps": [],
+            }
+
+    database.save_analysis(
+        "The first decision needs enough context to pass validation.",
+        MockResult("First Decision"),
+    )
+
+    database.save_analysis(
+        "The second decision needs enough context to pass validation.",
+        MockResult("Second Decision"),
+    )
+
+    history = database.get_history()
+
+    assert len(history) == 2
+    assert history[0]["decision"] == "Second Decision"
+    assert history[1]["decision"] == "First Decision"
